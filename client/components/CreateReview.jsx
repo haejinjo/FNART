@@ -154,19 +154,31 @@ class CreateReview extends Component {
     // TODO: parse chosen week and student roster github handles to provide direct links to repos!
     // TODO: request data via GET request to residentsController (?) getAllResidents middleware
     // let studentRoster = ['Haejin Jo', 'Serena Kuo', 'Justin Choo', 'Wyatt Bell'];
-    const weeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    const weekNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     if (this.state.residents) {
-      const dropdownItems = [];
+      const residentDropdownItems = [];
       let resident = null;
       for (let i = 0; i < this.state.residents.length; i += 1) {
         resident = this.state.residents[i];
-        dropdownItems.push(
+        residentDropdownItems.push(
           <Dropdown.Item key={`ddiKey${i}`}>
             {resident.username}
           </Dropdown.Item>
         );
       }
+
+      const weekDropdownItems = [];
+      let week = null;
+      for (let i = 0; i < weekNums.length; i += 1) {
+        week = weekNums[i];
+        weekDropdownItems.push(
+          <Dropdown.Item key={`wdiKey${i}`}>
+            {week}
+          </Dropdown.Item>
+        );
+      }
+
       return (
         <div className="createReview">
           <h4>Week {this.state.chosenWeek} Assessment Review for Resident {this.state.reviewee}</h4><br />
@@ -174,10 +186,10 @@ class CreateReview extends Component {
           {/* <Dropdown options={this.state.dropdownOptions} placeholder='Select a resident to review' /><br /> */}
           <div class='dropDownButtons'>
             <DropdownButton title='Select Resident'>
-              {dropdownItems}
+              {residentDropdownItems}
             </DropdownButton>
             <DropdownButton title='Select Assessment Week'>
-              {weeks}
+              {weekDropdownItems}
             </DropdownButton>
           </div>
           <textarea className='newReviewBody' /><br />
