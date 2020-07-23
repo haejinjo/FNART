@@ -27,7 +27,7 @@ reviewController.getReviews = (req, res, next) => {
       // Date this review was created
       // Date this review was last edited
 
-      res.locals.data = data;
+      res.locals.reviews = data.rows;
       return next();
     })
     .catch((e) => {
@@ -49,11 +49,12 @@ reviewController.addReview = (req, res, next) => {
   // throw error: this student does not exist
   // Else
   // INSERT the current week, review body text, fellow/resident IDs, and current timestamp
-  const reviewObj = req.body;
+  const { review_id, week, body, fellow_id, resident_id } = req.body;
   const insertQuery = `INSERT INTO reviews (week, body, fellow_id, resident_id)
-                      VALUES()`;
+                       VALUES($2, $3, $4, $5)
+                       WHERE _id = $1`;
 
-  db.query(insertQuery, [])
+  db.query(insertQuery, [review_id, week, body])
     .then((data) => {
       next();
     })
@@ -135,6 +136,9 @@ reviewController.deleteReview = (req, res, next) => {
 };
 
 /*
+
+FORGOT TO MAKE usernames UNIQUE!!!
+
  CREATE TABLE Reviews (
   "_id" SERIAL PRIMARY KEY,
   "week" integer NOT NULL,
@@ -162,3 +166,5 @@ reviewController.deleteReview = (req, res, next) => {
  );
 
  */
+
+module.exports = reviewController;

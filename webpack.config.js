@@ -6,10 +6,16 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
   },
-  // mode: 'production',
-  // devServer: {
-  //   publicPath: '/build/',
-  // },
+  mode: process.env.NODE_ENV,
+  devServer: {
+    publicPath: '/build/',
+    // In dev mode,
+    // Proxy requests for certain API routes to PORT 3000, our Express backend domain
+    proxy: {
+      '/api/': 'http://localhost:3000',
+      '/user/': 'http://localhost:3000',
+    },
+  },
   module: {
     rules: [
       // 1. RULE FOR JSX/JS FILES

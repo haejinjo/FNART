@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const reviewController = require('./controllers/reviewController');
+const userController = require('./controllers/userController');
 const apiRouter = require('./routes/api');
+const userRouter = require('./routes/user');
 
 const app = express();
 
@@ -13,15 +15,10 @@ const PORT = 3000;
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// TODO: check if you really need an api route??
+// maybe for modifying a specific review?
 app.use('/api', apiRouter);
-
-app.get('/login', (req, res) => {
-  res.status(200).send('This is the login page');
-});
-
-app.get('/signup', (req, res) => {
-  res.status(200).send('This is the signup page');
-});
+app.use('/user', userRouter);
 
 app.get('/', /* reviewController.getReviews, */(req, res) => {
   if (res.locals.noReviews) {
