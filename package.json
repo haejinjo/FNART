@@ -1,0 +1,37 @@
+{
+  "name": "penumbra",
+  "version": "1.0.0",
+  "description": "Solo project etc.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot --inline --progress --colors --watch --content-base ./\" \"nodemon ./server/server.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Haejin https://github.com/haejinjo <h3jnjo@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.6.0",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4",
+    "sass-loader": "^9.0.2",
+    "style-loader": "^1.2.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "pg": "^8.3.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "webpack": "^4.43.0"
+  }
+}
