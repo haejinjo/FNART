@@ -41,7 +41,7 @@ module.exports = {
       }, // end of rule 1
       // 2. RULE FOR SASS/SCSS FILES
       {
-        test: /.(css|scss)$/,
+        test: /\.(css|scss)$/,
         exclude: /node_modules/,
         use: [
           // 3. Inject CSS into the DOM 
@@ -58,6 +58,20 @@ module.exports = {
           },
         ],
       }, // End of rule 2
+      // 3. RULE FOR BOOTSTRAP CSS FILE
+      {
+        test: /\.css$/,
+        use: [
+          // 2. Inject CSS into the DOM 
+          {
+            loader: 'style-loader',
+          },
+          // 1. Convert CSS to CommonJS
+          {
+            loader: 'css-loader',
+          },
+        ],
+      }, // End of rule 3
     ], // End of rules array
   }, // End of module 
   resolve: {

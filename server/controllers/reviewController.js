@@ -4,6 +4,7 @@ const reviewController = {};
 
 reviewController.getReviews = (req, res, next) => {
   const fellow_id = req.params.id;
+  console.log(`fellow_id from params is: ${fellow_id}`)
   // Receive id of fellow or resident in request
   // If id doesn't exist in Fellows or Residents tables
   // Redirect to signup
@@ -31,6 +32,7 @@ reviewController.getReviews = (req, res, next) => {
       return next();
     })
     .catch((e) => {
+      console.log('error getting reviews: ', e);
       return next(e);
     });
 };
@@ -59,6 +61,7 @@ reviewController.addReview = (req, res, next) => {
       next();
     })
     .catch((e) => {
+      console.log('error adding review!')
       next(e);
     });
 };
@@ -165,6 +168,11 @@ FORGOT TO MAKE usernames UNIQUE!!!
   "password" varchar NOT NULL
  );
 
+
+INSERT INTO reviews ()
+ Hi Haejin,
+Awesome job on your week 4 assessment, all your functions work as expected! You have a solid schema set up and you did a great job of using callback functions to execute your database queries. I also loved how you had specific error messages for each controller and used res.locals to pass data through middleware. You also sent back the appropriate status codes, however, I noticed that you are storing your error within res.locals.error and checking it within your route. Although this method works, it’s not the most conventional. I suggest passing in error into next(), since if there is an error there’s no need to move onto the next middleware.
+Overall, you nailed the assessment Haejin! Feel free to reach out to me if you have any questions! :slightly_smiling_face:
  */
 
 module.exports = reviewController;

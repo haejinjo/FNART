@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import ReviewContainer from './ReviewContainer';
 
+import '../styles/main.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class App extends Component {
   constructor(props) {
     super(props)

@@ -1,5 +1,6 @@
 const express = require('express');
 const reviewController = require('../controllers/reviewController');
+const residentController = require('../controllers/residentController');
 
 
 /* 
@@ -7,7 +8,13 @@ const reviewController = require('../controllers/reviewController');
  */
 const router = express.Router();
 
+router.get('/residents', residentController.getAllResidents, (req, res) => {
+  console.log('got to last middleware in getting all/api/residents with ', res.locals.residents)
+  return res.status(200).json({ residentsArray: res.locals.residents });
+});
+
 router.get('/:id', reviewController.getReviews, (req, res) => {
+  console.log('querying for id for some reason')
   if (res.locals.noReviews) {
     console.log(`Successfully queries for user with id ${req.params.id} but no reviews for them found!`);
   }
@@ -17,7 +24,8 @@ router.get('/:id', reviewController.getReviews, (req, res) => {
 
   // Sending a JSON object to the client
   // res.send(...{'Content-Type': 'text/json'}...)
-  res.status(200).json({ reviews: reviews });
+  return res.status(200).json({ reviews: reviews });
 });
+
 
 module.exports = router;
