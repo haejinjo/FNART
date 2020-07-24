@@ -7,7 +7,8 @@ class CreateReview extends Component {
     super(props)
 
     this.state = {
-      chosenWeek: null,
+      chosenWeek: '?',
+      chosenResidentName: '?',
       chosenResidentId: null,
       dropdownOptions: [
         {
@@ -91,9 +92,13 @@ class CreateReview extends Component {
         },
       ],
       residents: null,
+      reviewBody: '',
     }
     this.createReview = this.createReview.bind(this);
+    this.handleTextareaChange = this.handleTextareaChange.bind(this);
     this.handleDropdownSelect = this.handleDropdownSelect.bind(this);
+    this.populateResidentDropdown = this.populateResidentDropdown.bind(this);
+    this.populateWeekDropdown = this.populateWeekDropdown.bind(this);
   }
 
   componentDidMount() {
@@ -111,10 +116,11 @@ class CreateReview extends Component {
       })
   }
 
-  createReview(body) {
+  createReview() {
     /*
      * Setup data object to POST to backend
      */
+    const body = this.state.reviewBody;
     // Fellow id is passed down from ReviewContainer
     const { fellow_id } = this.props;
     // Week and resident_id should be set with dropdown
@@ -126,65 +132,89 @@ class CreateReview extends Component {
       week: chosenWeek,
     }
 
+    // {body: "nice haejin", fellow_id: 3, resident_id: "5", week: "4"}
+    // console.log('reviewObj: ', reviewObj);
     /*
      * Send data to create new review in backend
      */
     fetch('/api/addReview', {
       method: 'POST',
-      body: JSON.stringify({ reviewObj }),
+      body: JSON.stringify(reviewObj),
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     })
       .then(res => res.json())
       .then((data) => {
         console.log('Got JSON response back from POST to addReview: ', data);
         // Set parent state to rerender ReviewContainer rather than CreateReview component
-        this.props.viewMode();
+        // Go "back" to view reviews
+        this.props.submitHandler();
       })
       .catch((e) => {
         console.log('createReview: ERROR: ', e);
       });
   }
 
-  handleDropdownSelect(e) {
-    console.log('resident selected out of list: ', e.target);
-    // this.setState({chosenResidentId: e._id});
+  handleDropdownSelect(e, type) {
+    const itemText = e.target.text;
+    if (type === 'week') {
+      this.setState({ chosenWeek: itemText });
+    }
+    else if (type === 'resident') {
+      const residentId = e.target.getAttribute('value');
+      this.setState({ chosenResidentName: itemText });
+      this.setState({ chosenResidentId: residentId });
+    }
+  }
+
+  populateResidentDropdown() {
+    const residentDropdownItems = [];
+    let resident = null;
+    for (let i = 0; i < this.state.residents.length; i += 1) {
+      resident = this.state.residents[i];
+      residentDropdownItems.push(
+        <Dropdown.Item key={`ddiKey${i}`} value={resident._id} onSelect={(ekey, e) => this.handleDropdownSelect(e, 'resident')}>
+          {resident.username}
+        </Dropdown.Item>
+      );
+    }
+    return residentDropdownItems;
+  }
+
+  populateWeekDropdown() {
+    const weekNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    const weekDropdownItems = [];
+    let week = null;
+    for (let i = 0; i < weekNums.length; i += 1) {
+      week = weekNums[i];
+      weekDropdownItems.push(
+        <Dropdown.Item key={`wdiKey${i}`} onSelect={(ekey, e) => this.handleDropdownSelect(e, 'week')}>
+          {week}
+        </Dropdown.Item>
+      );
+    }
+    return weekDropdownItems;
+  }
+
+  handleTextareaChange(e) {
+    this.setState({ reviewBody: e.target.value })
   }
 
   render() {
     // TODO: parse chosen week and student roster github handles to provide direct links to repos!
-    // TODO: request data via GET request to residentsController (?) getAllResidents middleware
-    // let studentRoster = ['Haejin Jo', 'Serena Kuo', 'Justin Choo', 'Wyatt Bell'];
-    const weekNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     if (this.state.residents) {
-      const residentDropdownItems = [];
-      let resident = null;
-      for (let i = 0; i < this.state.residents.length; i += 1) {
-        resident = this.state.residents[i];
-        residentDropdownItems.push(
-          <Dropdown.Item key={`ddiKey${i}`}>
-            {resident.username}
-          </Dropdown.Item>
-        );
-      }
 
-      const weekDropdownItems = [];
-      let week = null;
-      for (let i = 0; i < weekNums.length; i += 1) {
-        week = weekNums[i];
-        weekDropdownItems.push(
-          <Dropdown.Item key={`wdiKey${i}`}>
-            {week}
-          </Dropdown.Item>
-        );
-      }
+      const residentDropdownItems = this.populateResidentDropdown();
+      const weekDropdownItems = this.populateWeekDropdown();
 
       return (
         <div className="createReview">
-          <h4>Week {this.state.chosenWeek} Assessment Review for Resident {this.state.reviewee}</h4><br />
+          <br />
+          <br />
+          <h4>Review {this.state.chosenResidentName}'s Week {this.state.chosenWeek} Assessment</h4><br />
       Choose Resident and Week to Review:<br />
           {/* <Dropdown options={this.state.dropdownOptions} placeholder='Select a resident to review' /><br /> */}
-          <div class='dropDownButtons'>
+          <div className='dropDownButtons'>
             <DropdownButton title='Select Resident'>
               {residentDropdownItems}
             </DropdownButton>
@@ -192,8 +222,8 @@ class CreateReview extends Component {
               {weekDropdownItems}
             </DropdownButton>
           </div>
-          <textarea className='newReviewBody' /><br />
-          <button>Submit Review</button>
+          <textarea onChange={(e) => this.handleTextareaChange(e)} className='newReviewBody' /><br />
+          <button onClick={this.createReview}>Submit Review</button>
         </div >
       );
     }

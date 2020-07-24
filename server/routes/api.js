@@ -13,6 +13,11 @@ router.get('/residents', residentController.getAllResidents, (req, res) => {
   return res.status(200).json({ residentsArray: res.locals.residents });
 });
 
+router.post('/addReview', reviewController.addReview, (req, res) => {
+  console.log('got to last middleware in POSTing /api/addReview')
+  return res.status(200).json({ status: 'niiiice' });
+});
+
 router.get('/:id', reviewController.getReviews, (req, res) => {
   console.log('querying for id for some reason')
   if (res.locals.noReviews) {

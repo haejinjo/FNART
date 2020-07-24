@@ -51,12 +51,12 @@ reviewController.addReview = (req, res, next) => {
   // throw error: this student does not exist
   // Else
   // INSERT the current week, review body text, fellow/resident IDs, and current timestamp
-  const { review_id, week, body, fellow_id, resident_id } = req.body;
+  const { week, body, fellow_id, resident_id } = req.body;
+  console.log('req.body: ', req.body);
   const insertQuery = `INSERT INTO reviews (week, body, fellow_id, resident_id)
-                       VALUES($2, $3, $4, $5)
-                       WHERE _id = $1`;
+                       VALUES($1, $2, $3, $4)`;
 
-  db.query(insertQuery, [review_id, week, body])
+  db.query(insertQuery, [week, body, fellow_id, resident_id])
     .then((data) => {
       next();
     })
