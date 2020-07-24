@@ -120,21 +120,21 @@ reviewController.editReview = (req, res, next) => {
 
 reviewController.deleteReview = (req, res, next) => {
   // Check for any changes reviewer id, reviewee id, week in DELETE request
-  const { fellow_id, resident_id, week } = req.body;
+  const { review_id } = req.body;
 
   // If reviewee id doesn't exist in Residents table
   // throw error: this student does not exist
   // Else
   // UPDATE the current week, review body text, fellow/resident IDs, and current timestamp
   const deleteQuery = `DELETE FROM reviews 
-                       WHERE fellow_id = $1 AND resident_id = $2 AND week = $3`;
+                       WHERE _id=$1`;
 
-  db.query(deleteQuery, [fellow_id, resident_id, week])
+  db.query(deleteQuery, [review_id])
     .then((data) => {
-      next();
+      return next();
     })
     .catch((e) => {
-      next(e);
+      return next(e);
     });
 };
 

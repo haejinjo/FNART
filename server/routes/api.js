@@ -15,7 +15,17 @@ router.get('/residents', residentController.getAllResidents, (req, res) => {
 
 router.post('/addReview', reviewController.addReview, (req, res) => {
   console.log('got to last middleware in POSTing /api/addReview')
-  return res.status(200).json({ status: 'niiiice' });
+  return res.status(200).json({ status: 'nice post' });
+});
+
+router.delete('/deleteReview', reviewController.deleteReview, (req, res) => {
+  console.log('got to last middleware in DELETEing /api/addReview')
+  return res.status(200).json({ status: 'nice delete' });
+});
+
+router.put('/editReview', reviewController.editReview, (req, res) => {
+  console.log('got to last middleware in PUTing /api/addReview')
+  return res.status(200).json({ status: 'nice put' });
 });
 
 router.get('/:id', reviewController.getReviews, (req, res) => {

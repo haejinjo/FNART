@@ -70,7 +70,7 @@ class ReviewContainer extends Component {
         let currentReview = null;
         for (let i = 0; i < reviewObjects.length; i += 1) {
           currentReview = reviewObjects[i];
-          reviewCards.push(<ReviewCard key={'reviewCardKey' + i} id={currentReview._id} week={currentReview.week} residentId={currentReview.resident_id} body={currentReview.body} />);
+          reviewCards.push(<ReviewCard deleteHandler={this.viewMode} key={'reviewCardKey' + i} id={currentReview._id} week={currentReview.week} residentId={currentReview.resident_id} body={currentReview.body} />);
         }
         return (
           <div className='reviewContainer'>
