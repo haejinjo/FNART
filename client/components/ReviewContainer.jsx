@@ -34,11 +34,24 @@ class ReviewContainer extends Component {
   }
 
   createMode() {
+    this.setState({ fetchedReviews: false })
     this.setState({ creatingReview: true });
   }
 
   viewMode() {
-    this.setState({ creatingReview: false });
+    fetch(`/api/${this.props.id}`)
+      .then((res => res.json()))
+      .then((data) => {
+        console.log('ReviewContainer: data fetched from /api: ', data);
+        // Store array of review objects from DB into component state
+        this.setState({ reviews: data.reviews });
+        // Notify Component that we've successfully gotten all the reviews it has to render
+        this.setState({ fetchedReviews: true });
+        this.setState({ creatingReview: false });
+      })
+      .catch((e) => {
+        console.log('fetch /api: ERROR: ', e);
+      });
   }
 
   render() {
